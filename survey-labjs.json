@@ -1,0 +1,314 @@
+{
+  "components": {
+    "3": {
+      "id": "3",
+      "type": "lab.flow.Sequence",
+      "children": [
+        "4"
+      ],
+      "parameters": {
+        "rows": [
+          [
+            {
+              "name": "_numberScreens",
+              "value": "5",
+              "type": "number"
+            }
+          ],
+          [
+            {
+              "name": "_panas_scale_1",
+              "value": "Very slightly or not at all",
+              "type": "string"
+            }
+          ],
+          [
+            {
+              "name": "_panas_scale_2",
+              "value": "A little",
+              "type": "string"
+            }
+          ],
+          [
+            {
+              "name": "_panas_scale_3",
+              "value": "Moderately",
+              "type": "string"
+            }
+          ],
+          [
+            {
+              "name": "_panas_scale_4",
+              "value": "Quite a bit",
+              "type": "string"
+            }
+          ],
+          [
+            {
+              "name": "_panas_scale_5",
+              "value": "Extremely",
+              "type": "string"
+            }
+          ],
+          [
+            {
+              "name": "_ratings_1",
+              "value": "Indicate the extent you feel in the current moment.",
+              "type": "string"
+            }
+          ],
+          [
+            {
+              "name": "_next_button",
+              "value": "Next",
+              "type": "string"
+            }
+          ]
+        ]
+      },
+      "responses": {
+        "rows": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      },
+      "messageHandlers": {
+        "rows": [
+          [
+            {
+              "title": "",
+              "message": "",
+              "code": ""
+            }
+          ]
+        ]
+      },
+      "title": "Questionnaire",
+      "_tab": "Scripts",
+      "files": {
+        "rows": []
+      }
+    },
+    "4": {
+      "id": "4",
+      "type": "lab.flow.Loop",
+      "children": [
+        "5"
+      ],
+      "parameters": {
+        "rows": [
+          [
+            {
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        ]
+      },
+      "templateParameters": {
+        "columns": [],
+        "rows": []
+      },
+      "responses": {
+        "rows": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      },
+      "messageHandlers": {
+        "rows": [
+          [
+            {
+              "title": "createParameters",
+              "message": "before:prepare",
+              "code": "const numberScreens = parseInt(this.parameters._numberScreens);\r\n\r\nvar trialParameters = [];\r\n\r\nlet statements = [\r\n  'interested',\r\n  'distressed',\r\n  'excited',\r\n  'upset',\r\n  'strong',\r\n  'guilty',\r\n  'scared',\r\n  'hostile',\r\n  'enthusiastic',\r\n  'proud',\r\n  'irritable',\r\n  'alert',\r\n  'ashamed',\r\n  'inspired',\r\n  'nervous',\r\n  'determined',\r\n  'attentive',\r\n  'jittery',\r\n  'active',\r\n  'afraid',\r\n  'tired',\r\n  'exhausted',\r\n  'sick',\r\n  'energized',\r\n  'focused'\r\n];\r\nshuffle(statements);\r\n\r\n//trial construction functions\r\nfunction fillArray(value, len) {\r\n  var arr = [];\r\n  for (var i = 0; i < len; i++) {\r\n    arr.push(value);\r\n   }\r\n  return arr;\r\n}\r\n\r\nfunction shuffle(a) {\r\n  var j, x, i;\r\n  for (i = a.length - 1; i > 0; i--) {\r\n    j = Math.floor(Math.random() * (i + 1));\r\n    x = a[i];\r\n    a[i] = a[j];\r\n    a[j] = x;\r\n  }\r\n}\r\n\r\nfunction trialConstructor(i) {\r\n  return {\r\n    \"statements\": statements.slice(i*5, (i+1)*5),\r\n  };\r\n}\r\n\r\nfor (i = 0; i < numberScreens; i++){\r\n  trialParameters = trialParameters.concat(trialConstructor(i));\r\n}\r\n\r\nthis.options.templateParameters = trialParameters;\r\nconsole.log(\"Parameters:\", trialParameters); "
+            }
+          ]
+        ]
+      },
+      "title": "Loop",
+      "_tab": "Scripts",
+      "files": {
+        "rows": []
+      },
+      "sample": {
+        "mode": "sequential"
+      }
+    },
+    "5": {
+      "id": "5",
+      "type": "lab.flow.Sequence",
+      "children": [
+        "6"
+      ],
+      "parameters": {
+        "rows": [
+          [
+            {
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        ]
+      },
+      "responses": {
+        "rows": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      },
+      "messageHandlers": {
+        "rows": [
+          [
+            {
+              "title": "",
+              "message": "",
+              "code": ""
+            }
+          ]
+        ]
+      },
+      "title": "Sequence",
+      "files": {
+        "rows": []
+      }
+    },
+    "6": {
+      "id": "6",
+      "type": "lab.html.Form",
+      "content": "<form>\n  <div class=\"survey\" id=\"surveyField\">\n    <div class=\"instruction\" id=\"instruction\">\n      <span>${this.parameters._ratings_1}</span>\n    </div>\n\n    <div class=\"ratingScale\" id=\"demo_0\">?</div>\n    <div class=\"ratingAdjective\" id=`ratingAdjective-${this.parameters.statements[0]}`>${this.parameters.statements[0]}</div>\n    <div class=\"response\" id=`response-${this.parameters.statements[0]}`>\n      <div class=\"slidecontainer\">\n        <input type=\"range\" name=${this.parameters.statements[0]} min=\"1\" max=\"5\" class=\"slider\" id=\"myRange_0\">\n      </div>\n    </div>\n\n    <div class=\"ratingScale\" id=\"demo_1\">?</div>\n    <div class=\"ratingAdjective\" id=`ratingAdjective-${this.parameters.statements[1]}`>${this.parameters.statements[1]}</div>\n    <div class=\"response\" id=`response-${this.parameters.statements[1]}`>\n      <div class=\"slidecontainer\">\n        <input type=\"range\" name=${this.parameters.statements[1]} min=\"1\" max=\"5\" class=\"slider\" id=\"myRange_1\">\n      </div>\n    </div>\n\n    <div class=\"ratingScale\" id=\"demo_2\">?</div>\n    <div class=\"ratingAdjective\" id=`ratingAdjective-${this.parameters.statements[2]}`>${this.parameters.statements[2]}</div>\n    <div class=\"response\" id=`response-${this.parameters.statements[2]}`>\n      <div class=\"slidecontainer\">\n        <input type=\"range\" name=${this.parameters.statements[2]} min=\"1\" max=\"5\" class=\"slider\" id=\"myRange_2\">\n      </div>\n    </div>\n\n    <div class=\"ratingScale\" id=\"demo_3\">?</div>\n    <div class=\"ratingAdjective\" id=`ratingAdjective-${this.parameters.statements[3]}`>${this.parameters.statements[3]}</div>\n    <div class=\"response\" id=`response-${this.parameters.statements[3]}`>\n      <div class=\"slidecontainer\">\n        <input type=\"range\" name=${this.parameters.statements[3]} min=\"1\" max=\"5\" class=\"slider\" id=\"myRange_3\">\n      </div>\n    </div>\n\n    <div class=\"ratingScale\" id=\"demo_4\">?</div>\n    <div class=\"ratingAdjective\" id=`ratingAdjective-${this.parameters.statements[4]}`>${this.parameters.statements[4]}</div>\n    <div class=\"response\" id=`response-${this.parameters.statements[4]}`>\n      <div class=\"slidecontainer\">\n        <input type=\"range\" name=${this.parameters.statements[4]} min=\"1\" max=\"5\" class=\"slider\" id=\"myRange_4\">\n      </div>\n    </div>\n\n    <button class=\"submit-survey\" id=\"submitBtn_1\" type=\"submit\" disabled>${this.parameters._next_button}</button>\n  </div>\n</form> ",
+      "parameters": {
+        "rows": [
+          [
+            {
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        ]
+      },
+      "responses": {
+        "rows": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      },
+      "messageHandlers": {
+        "rows": [
+          [
+            {
+              "title": "scripts",
+              "message": "run",
+              "code": "const slider_0 = document.getElementById(\"myRange_0\");\r\nconst output_0 = document.getElementById(\"demo_0\");\r\nconst slider_1 = document.getElementById(\"myRange_1\");\r\nconst output_1 = document.getElementById(\"demo_1\");\r\nconst slider_2 = document.getElementById(\"myRange_2\");\r\nconst output_2 = document.getElementById(\"demo_2\");\r\nconst slider_3 = document.getElementById(\"myRange_3\");\r\nconst output_3 = document.getElementById(\"demo_3\");\r\nconst slider_4 = document.getElementById(\"myRange_4\");\r\nconst output_4 = document.getElementById(\"demo_4\");\r\nconst submitBtn = document.getElementById(\"submitBtn_1\");\r\n\r\nconst changeLabel = (slider, output) => {\r\n  if(slider.value == 1){ \r\n    output.innerHTML = this.parameters._panas_scale_1;\r\n  } else if (slider.value == 2){\r\n    output.innerHTML = this.parameters._panas_scale_2;\r\n  } else if(slider.value == 3){\r\n    output.innerHTML = this.parameters._panas_scale_3;\r\n  } else if(slider.value == 4){\r\n    output.innerHTML = this.parameters._panas_scale_4;\r\n  } else {\r\n    output.innerHTML = this.parameters._panas_scale_5;\r\n  }\r\n};\r\n\r\nconst checkIfAnswered = () => {\r\n  if (slider_0.style.backgroundColor == 'green' & slider_1.style.backgroundColor == 'green' & slider_2.style.backgroundColor == 'green' & slider_3.style.backgroundColor == 'green' & slider_4.style.backgroundColor == 'green'){\r\n    submitBtn.disabled = false;\r\n    submitBtn.style.backgroundColor = 'lightgreen';\r\n  }\r\n}\r\n\r\n// Update the current slider value (each time you drag the slider handle)\r\nslider_0.oninput = function(){\r\n  this.style.backgroundColor = 'green';\r\n  checkIfAnswered();\r\n  changeLabel(this, output_0);\r\n}\r\nslider_1.oninput = function(){\r\n  this.style.backgroundColor = 'green';\r\n  checkIfAnswered();\r\n  changeLabel(this, output_1);\r\n}\r\nslider_2.oninput = function(){\r\n  this.style.backgroundColor = 'green';\r\n  checkIfAnswered();\r\n  changeLabel(this, output_2);\r\n}\r\nslider_3.oninput = function(){\r\n  this.style.backgroundColor = 'green';\r\n  checkIfAnswered();\r\n  changeLabel(this, output_3);\r\n}\r\nslider_4.oninput = function(){\r\n  this.style.backgroundColor = 'green';\r\n  checkIfAnswered();\r\n  changeLabel(this, output_4);\r\n}"
+            }
+          ],
+          [
+            {
+              "title": "hookMouseEvents",
+              "message": "before:prepare",
+              "code": "this.options.events['mousemove'] = function(e) {\n  // record data\n  const mouseEvent = {\n    mousePageX : e.pageX,\n    mousePageY : e.pageY,\n    mouseTimestamp : e.timeStamp,\n    mouseEvent : e.type,\n    mouseInputTargetName : e.target && e.target.name,\n    mouseInputTargetValue : e.target && e.target.value,\n    mouseSrcElementId : e.srcElement && e.srcElement.id\n  }\n  this.options.datastore.commit(mouseEvent)\n}\n\nthis.options.events['click'] = function(e) {\n  // record data\n  const mouseEvent = {\n    mousePageX : e.pageX,\n    mousePageY : e.pageY,\n    mouseTimestamp : e.timeStamp,\n    mouseEvent : e.type,\n    mouseInputTargetName : e.target && e.target.name,\n    mouseInputTargetValue : e.target && e.target.value,\n    mouseSrcElementId : e.srcElement && e.srcElement.id\n  }\n  this.options.datastore.commit(mouseEvent)\n}\n\nthis.options.events['mouseup'] = function(e) {\n  // record data\n  const mouseEvent = {\n    mousePageX : e.pageX,\n    mousePageY : e.pageY,\n    mouseTimestamp : e.timeStamp,\n    mouseEvent : e.type,\n    mouseInputTargetName : e.target && e.target.name,\n    mouseInputTargetValue : e.target && e.target.value,\n    mouseSrcElementId : e.srcElement && e.srcElement.id\n  }\n  this.options.datastore.commit(mouseEvent)\n}\n\nthis.options.events['mousedown'] = function(e) {\n  // record data\n  const mouseEvent = {\n    mousePageX : e.pageX,\n    mousePageY : e.pageY,\n    mouseTimestamp : e.timeStamp,\n    mouseEvent : e.type,\n    mouseInputTargetName : e.target && e.target.name,\n    mouseInputTargetValue : e.target && e.target.value,\n    mouseSrcElementId : e.srcElement && e.srcElement.id\n  }\n  this.options.datastore.commit(mouseEvent)\n}"
+            }
+          ]
+        ]
+      },
+      "title": "Survey_1",
+      "_tab": "Scripts",
+      "tardy": true,
+      "files": {
+        "rows": []
+      }
+    },
+    "root": {
+      "id": "root",
+      "title": "root",
+      "type": "lab.flow.Sequence",
+      "children": [
+        "3"
+      ],
+      "parameters": {
+        "rows": [
+          [
+            {
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        ]
+      },
+      "plugins": [
+        {
+          "type": "lab.plugins.Metadata"
+        }
+      ],
+      "metadata": {
+        "title": "Survey",
+        "description": "",
+        "repository": "",
+        "contributors": ""
+      },
+      "files": {
+        "rows": []
+      }
+    }
+  },
+  "version": [
+    19,
+    1,
+    0
+  ],
+  "files": {
+    "files": {
+      "index.html": {
+        "content": "data:text/html,%3C!doctype%20html%3E%0A%3Chtml%3E%0A%3Chead%3E%0A%20%20%3Cmeta%20charset%3D%22utf-8%22%3E%0A%20%20%3Ctitle%3EExperiment%3C%2Ftitle%3E%0A%20%20%3C!--%20lab.js%20library%20and%20experiment%20code%20--%3E%0A%20%20%24%7B%20header%20%7D%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%20%20%3C!--%20If%20you'd%20rather%20have%20a%20container%20with%20a%20fixed%20width%0A%20%20%20%20%20%20%20and%20variable%20height%2C%20try%20removing%20the%20fullscreen%20class%20below%20--%3E%0A%20%20%3Cdiv%20class%3D%22container%20fullscreen%22%20data-labjs-section%3D%22main%22%3E%0A%20%20%20%20%3Cmain%20class%3D%22content-vertical-center%20content-horizontal-center%22%3E%0A%20%20%20%20%20%20%3Cdiv%3E%0A%20%20%20%20%20%20%20%20%3Ch2%3ELoading%20Experiment%3C%2Fh2%3E%0A%20%20%20%20%20%20%20%20%3Cp%3EThe%20experiment%20is%20loading%20and%20should%20start%20in%20a%20few%20seconds%3C%2Fp%3E%0A%20%20%20%20%20%20%3C%2Fdiv%3E%0A%20%20%20%20%3C%2Fmain%3E%0A%20%20%3C%2Fdiv%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A",
+        "source": "library"
+      },
+      "style.css": {
+        "content": "data:text/css,%2F*%20Please%20define%20your%20custom%20styles%20here%20*%2F%0D%0A.lottery%7B%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20height%3A%2080vh%3B%0D%0A%20%20grid-template-rows%3A%20repeat(10%2C%201fr)%3B%0D%0A%20%20grid-template-columns%3A%20repeat(10%2C%201fr)%3B%0D%0A%20%20grid-gap%3A%2020px%3B%0D%0A%7D%0D%0A%0D%0A.score%7B%0D%0A%20%20display%3Agrid%3B%0D%0A%20%20grid-column%3A%205%2F7%3B%0D%0A%20%20grid-row%3A%202%2F4%3B%0D%0A%20%20justify-content%3A%20center%3B%0D%0A%20%20align-items%3A%20center%3B%0D%0A%20%20border-radius%3A%2020px%3B%0D%0A%20%20font-size%3A%201.5rem%3B%0D%0A%20%20font-weight%3A%20bold%3B%0D%0A%20%20background-color%3A%20antiquewhite%3B%0D%0A%7D%0D%0A%0D%0A.labl%7B%0D%0A%20%20justify-content%3A%20inherit%3B%0D%0A%20%20align-items%3A%20inherit%3B%0D%0A%20%20border%3A%205px%20solid%20rgba(0%2C%200%2C%200%2C%200.03)%3B%0D%0A%20%20border-radius%3A%2020px%3B%0D%0A%20%20font-size%3A%2030px%3B%0D%0A%20%20background-color%3A%20white%3B%0D%0A%20%20transition-delay%3A%201s%3B%20%0D%0A%7D%0D%0A%0D%0A.left%7B%20%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20grid-column%3A%202%2F6%3B%0D%0A%20%20grid-row%3A%204%2F7%3B%0D%0A%7D%0D%0A%0D%0A.right%7B%20%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20grid-column%3A%206%2F10%3B%0D%0A%20%20grid-row%3A%204%2F7%3B%0D%0A%7D%0D%0A%0D%0A.option%20%7B%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20justify-content%3A%20center%3B%0D%0A%20%20align-items%3A%20center%3B%0D%0A%20%20font-size%3A%202rem%3B%0D%0A%20%20font-weight%3A%20bold%3B%0D%0A%20%20line-height%3A%20initial%3B%0D%0A%7D%0D%0A%0D%0A.labl%20%3E%20input%7B%20%2F*%20HIDE%20RADIO%20*%2F%0D%0A%20%20visibility%3A%20hidden%3B%20%2F*%20Makes%20input%20not-clickable%20*%2F%0D%0A%20%20position%3A%20absolute%3B%20%2F*%20Remove%20input%20from%20document%20flow%20*%2F%0D%0A%7D%0D%0A%0D%0A.labl%20%3E%20input%20%2B%20div%7B%20%2F*%20DIV%20STYLES%20*%2F%0D%0A%20%20cursor%3Apointer%3B%0D%0A%20%20border%3A2px%20solid%20transparent%3B%0D%0A%7D%0D%0A%0D%0A.labl%20%3E%20input%3Achecked%20%2B%20div%7B%20%2F*%20(RADIO%20CHECKED)%20DIV%20STYLES%20*%2F%0D%0A%20%20background-color%3A%20khaki%3B%0D%0A%20%20border%3A%2010px%20solid%20dimgray%3B%0D%0A%20%20border-radius%3A%2020px%3B%0D%0A%7D%0D%0A%0D%0A.submit%20%7B%0D%0A%20%20grid-column%3A%204%2F8%3B%0D%0A%20%20font-size%3A%2035px%3B%0D%0A%20%20border-radius%3A%2020px%3B%0D%0A%20%20transition%3A%20all%201s%3B%0D%0A%20%20grid-row%3A%20span%202%3B%0D%0A%20%20grid-row-end%3A%20-2%3B%0D%0A%20%20min-height%3A%2050px%3B%0D%0A%20%20min-width%3A%20100px%3B%0D%0A%7D%0D%0A%0D%0A.submit-survey%20%7B%0D%0A%20%20grid-column%3A%204%2F8%3B%0D%0A%20%20font-size%3A%2035px%3B%0D%0A%20%20border-radius%3A%2020px%3B%0D%0A%20%20transition%3A%20all%201s%3B%0D%0A%20%20min-height%3A%2050px%3B%0D%0A%20%20min-width%3A%20100px%3B%0D%0A%7D%0D%0A%0D%0A.submit%3Ahover%20%7B%0D%0A%20%20cursor%3Apointer%3B%0D%0A%7D%0D%0A%0D%0A.submit-survey%3Ahover%20%7B%0D%0A%20%20cursor%3Apointer%3B%0D%0A%7D%0D%0A%0D%0A%3Aroot%20%7B%0D%0A%20%20--yellow%3A%20%23ffc600%3B%0D%0A%20%20--black%3A%20%23272727%3B%0D%0A%7D%0D%0A%0D%0Ahtml%20%7B%0D%0A%20%20%2F*%20border-box%20box%20model%20allows%20us%20to%20add%20padding%20and%20border%20to%20our%20elements%20without%20increasing%20their%20size%20*%2F%0D%0A%20%20box-sizing%3A%20border-box%3B%0D%0A%20%20%2F*%20A%20system%20font%20stack%20so%20things%20load%20nice%20and%20quick!%20*%2F%0D%0A%20%20%2F%2Ffont-family%3A%20-apple-system%2C%20BlinkMacSystemFont%2C%20%22Segoe%20UI%22%2C%20Roboto%2C%20Helvetica%2C%20Arial%2C%20sans-serif%2C%20%22Apple%20Color%20Emoji%22%2C%20%22Segoe%20UI%20Emoji%22%2C%20%22Segoe%20UI%20Symbol%22%3B%0D%0A%20%20%2F%2Ffont-weight%3A%20900%3B%0D%0A%20%20%2F%2Ffont-size%3A%2010px%3B%0D%0A%20%20color%3A%20var(--black)%3B%0D%0A%20%20%2F%2Ftext-shadow%3A%200%202px%200%20rgba(0%2C%200%2C%200%2C%200.07)%3B%0D%0A%7D%0D%0A%0D%0Abody%20%7B%0D%0A%20%20background%3A%20white%3B%20%0D%0A%20%2F%2F%20letter-spacing%3A%20-1px%3B%0D%0A%20%20font-family%3A%20-apple-system%2C%20BlinkMacSystemFont%2C%20%22Segoe%20UI%22%2C%20Roboto%2C%20Helvetica%2C%20Arial%2C%20sans-serif%2C%20%22Apple%20Color%20Emoji%22%2C%20%22Segoe%20UI%20Emoji%22%2C%20%22Segoe%20UI%20Symbol%22%3B%0D%0A%20%20font-size%3A%2020px%3B%0D%0A%7D%0D%0A%0D%0Ah1%2C%0D%0Ah2%2C%0D%0Ah3%2C%0D%0Ah4%2C%0D%0Ah5%2C%0D%0Ah6%20%7B%0D%0A%20%20margin%3A%200%200%205px%200%3B%0D%0A%7D%0D%0A%0D%0Ap%20%7B%0D%0A%20%20margin%3A%200%200%205px%200%3B%0D%0A%7D%0D%0A%0D%0A.survey%7B%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20height%3A%2090vh%3B%0D%0A%20%20grid-template-rows%3A%20repeat(10%2C%201fr)%3B%0D%0A%20%20grid-template-columns%3A%20repeat(10%2C%201fr)%3B%0D%0A%20%20grid-gap%3A%2010px%3B%0D%0A%7D%0D%0A%0D%0A.instruction%7B%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20grid-column%3A%202%2F10%3B%0D%0A%20%20align-items%3A%20center%3B%0D%0A%20%20justify-content%3A%20center%3B%0D%0A%20%20margin%3A%2020px%3B%0D%0A%20%20text-align%3A%20justify%3B%0D%0A%7D%0D%0A%0D%0A.ratingScale%7B%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20grid-column%3A%201%2F6%3B%0D%0A%20%20grid-row%3A%20span%201%3B%0D%0A%20%20justify-content%3A%20right%3B%0D%0A%20%20align-items%3A%20center%3B%0D%0A%20%20font-size%3A%2030px%3B%0D%0A%7D%0D%0A%0D%0A.ratingAdjective%7B%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20grid-column%3A%206%2F11%3B%0D%0A%20%20grid-row%3A%20span%201%3B%0D%0A%20%20justify-content%3A%20left%3B%0D%0A%20%20align-items%3A%20center%3B%0D%0A%20%20font-size%3A%2030px%3B%20%0D%0A%7D%0D%0A%0D%0A.response%7B%0D%0A%20%20display%3A%20grid%3B%0D%0A%20%20grid-column%3A%205%2F7%3B%0D%0A%20%20grid-row%3A%20span%201%3B%0D%0A%20%20align-items%3A%20center%3B%0D%0A%20%20font-size%3A%2020px%3B%0D%0A%7D%0D%0A%0D%0A.slidecontainer%20%7B%0D%0A%20%20%20%20align-items%3A%20center%3B%0D%0A%20%20%20%20justify-content%3A%20center%3B%0D%0A%7D%0D%0A%0D%0A%2F*%20The%20slider%20itself%20*%2F%0D%0A.slider%20%7B%0D%0A%20%20%20%20-webkit-appearance%3A%20none%3B%20%20%2F*%20Override%20default%20CSS%20styles%20*%2F%0D%0A%20%20%20%20appearance%3A%20none%3B%0D%0A%20%20%20%20width%3A%20-webkit-fill-available%3B%0D%0A%20%20%20%20height%3A%201px%3B%20%2F*%20Specified%20height%20*%2F%0D%0A%20%20%20%20border-radius%3A%205px%3B%0D%0A%20%20%20%20background%3A%20%23d3d3d3%3B%20%2F*%20Grey%20background%20*%2F%0D%0A%20%20%20%20outline%3A%20none%3B%20%2F*%20Remove%20outline%20*%2F%0D%0A%20%20%20%20opacity%3A%200.7%3B%20%2F*%20Set%20transparency%20(for%20mouse-over%20effects%20on%20hover)%20*%2F%0D%0A%20%20%20%20-webkit-transition%3A%20.2s%3B%20%2F*%200.2%20seconds%20transition%20on%20hover%20*%2F%0D%0A%20%20%20%20transition%3A%20opacity%20.2s%3B%0D%0A%20%20%20%20padding%3A%201px%3B%0D%0A%7D%0D%0A%0D%0A%2F*%20Mouse-over%20effects%20*%2F%0D%0A.slider%3Ahover%20%7B%0D%0A%20%20%20%20opacity%3A%201%3B%20%2F*%20Fully%20shown%20on%20mouse-over%20*%2F%0D%0A%7D%0D%0A%0D%0A%2F*%20The%20slider%20handle%20(use%20-webkit-%20(Chrome%2C%20Opera%2C%20Safari%2C%20Edge)%20and%20-moz-%20(Firefox)%20to%20override%20default%20look)%20*%2F%0D%0A.slider%3A%3A-webkit-slider-thumb%20%7B%0D%0A%20%20%20%20-webkit-appearance%3A%20none%3B%20%2F*%20Override%20default%20look%20*%2F%0D%0A%20%20%20%20appearance%3A%20none%3B%0D%0A%20%20%20%20width%3A%2030px%3B%20%2F*%20Set%20a%20specific%20slider%20handle%20width%20*%2F%0D%0A%20%20%20%20height%3A%2030px%3B%20%2F*%20Slider%20handle%20height%20*%2F%0D%0A%20%20%20%20border-radius%3A%2050%25%3B%20%0D%0A%20%20%20%20background%3A%20%234CAF50%3B%20%2F*%20Green%20background%20*%2F%0D%0A%20%20%20%20cursor%3A%20pointer%3B%20%2F*%20Cursor%20on%20hover%20*%2F%0D%0A%7D%0D%0A%0D%0A.slider%3A%3A-moz-range-thumb%20%7B%0D%0A%20%20%20%20width%3A%2030px%3B%20%2F*%20Set%20a%20specific%20slider%20handle%20width%20*%2F%0D%0A%20%20%20%20height%3A%2030px%3B%20%2F*%20Slider%20handle%20height%20*%2F%0D%0A%20%20%20%20border-radius%3A%2050%25%3B%20%0D%0A%20%20%20%20background%3A%20%234CAF50%3B%20%2F*%20Green%20background%20*%2F%0D%0A%20%20%20%20cursor%3A%20pointer%3B%20%2F*%20Cursor%20on%20hover%20*%2F%0D%0A%7D%0D%0A",
+        "source": "library"
+      }
+    },
+    "bundledFiles": {
+      "lib/lab.js": {
+        "type": "application/javascript"
+      },
+      "lib/lab.js.map": {
+        "type": "text/plain"
+      },
+      "lib/lab.fallback.js": {
+        "type": "application/javascript"
+      },
+      "lib/lab.legacy.js": {
+        "type": "application/javascript"
+      },
+      "lib/lab.legacy.js.map": {
+        "type": "text/plain"
+      },
+      "lib/lab.css": {
+        "type": "text/css"
+      },
+      "lib/loading.svg": {
+        "type": "image/svg+xml"
+      }
+    }
+  }
+}
